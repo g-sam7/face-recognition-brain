@@ -1,7 +1,9 @@
 const Navigation = () => {
   return (
     <nav className="flex justify-end p-4">
-      <p className="text-2xl">Sign Out</p>
+      <button type="button" className="text-stone-100 underline">
+        <p className="text-1xl">Sign Out</p>
+      </button>
     </nav>
   )
 }
