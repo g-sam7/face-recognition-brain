@@ -2,7 +2,7 @@ import ParticlesBg from 'particles-bg'
 
 const ParticleBackground = () => {
   return (
-    <ParticlesBg type="lines" bg={true} />
+    <ParticlesBg type="cobweb" bg={true} />
   )
 }
 
