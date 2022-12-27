@@ -6,7 +6,7 @@ import ParticleBackground from '../components/ParticleBackground/ParticleBackgro
 import Navigation from '../components/Navigation/Navigation';
 import Logo from '../components/Logo/Logo';
 import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
-import Rank from '../components/Rank/Rank';
+import UploadCount from '../components/UploadCount/UploadCount';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import SignIn from '../components/SignIn/SignIn';
 import Register from '../components/Register/Register';
@@ -76,10 +76,25 @@ class App extends Component {
   // You can just use this as the first param instead of the model in case the api is down:
   // "53e1df302c079b3db8a0a36033ed2d15"
 
-  onSubmit = () => {
+  onImageUpload = () => {
     this.setState({ imageURL: this.state.input })
     app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then((response) => this.displayFaceBox(this.calculateFaceLocation(response)))
+      .then((response) => {
+        if (response) {
+          fetch('http://localhost:3000/image', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: this.state.user.id,
+            })
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, { entries: count }))
+            })
+          })
+        }
+        this.displayFaceBox(this.calculateFaceLocation(response))
+      })
       .catch((error) => console.log(error));
   }
 
@@ -94,13 +109,13 @@ class App extends Component {
     const HomePage = (
       <div>
         <Logo />
-        <Rank
+        <UploadCount
           name={user.name}
           entries={user.entries}
         />
         <ImageLinkForm
           onInputChange={this.onInputChange}
-          onButtonSubmit={this.onSubmit}
+          onButtonSubmit={this.onImageUpload}
         />
         <FaceRecognition
           imageURL={imageURL}
