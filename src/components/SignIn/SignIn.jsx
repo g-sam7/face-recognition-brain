@@ -36,6 +36,7 @@ const SignIn = ({
   }
   return (
     <div>
+       {/* TODO: DRY this up into a shared form between Signin and Register */}
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="flex justify-center">
           <Logo />

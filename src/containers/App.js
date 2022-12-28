@@ -14,23 +14,26 @@ import Register from '../components/Register/Register';
 const app = new Clarifai.App({
   apiKey: '1b12ae636bb5460fadf4ba443da100f8'
  });
+
+const initialState = {
+  input: '',
+  imageURL: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: '',
+  },
+};
+
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageURL: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: '',
-      },
-    }
+    this.state = {initialState}
   }
 
   loadUser = (data) => {
@@ -45,7 +48,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({ isSignedIn: false })
+      this.setState(initialState)
     } else if ( route === 'home') {
       this.setState({ isSignedIn: true })
     }
@@ -92,6 +95,7 @@ class App extends Component {
               this.setState(Object.assign(this.state.user, { entries: count }))
             })
           })
+          .catch(console.log)
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
