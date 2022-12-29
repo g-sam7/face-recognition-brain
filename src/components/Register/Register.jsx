@@ -10,7 +10,7 @@ const Register = ({
   const [registerPassword, setRegisterPassword] = useState('');
 
   const onSubmitRegister = () => {
-    fetch('http://localhost:3000/register', {
+    fetch('https://face-recognition-brain-api.herokuapp.com/register', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({

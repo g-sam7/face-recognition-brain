@@ -73,7 +73,7 @@ class App extends Component {
 
   onImageUpload = () => {
     this.setState({ imageURL: this.state.input });
-      fetch('http://localhost:3000/imageurl', {
+      fetch('https://face-recognition-brain-api.herokuapp.com/imageurl', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -83,7 +83,7 @@ class App extends Component {
       .then(response => response.json())
       .then((response) => {
         if (response) {
-          fetch('http://localhost:3000/image', {
+          fetch('https://face-recognition-brain-api.herokuapp.com/image', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
