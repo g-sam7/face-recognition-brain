@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import Clarifai from 'clarifai';
 import './App.css';
 import ErrorBoundry from '../components/ErrorBoundry';
 import ParticleBackground from '../components/ParticleBackground/ParticleBackground';
@@ -10,10 +9,6 @@ import UploadCount from '../components/UploadCount/UploadCount';
 import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
 import SignIn from '../components/SignIn/SignIn';
 import Register from '../components/Register/Register';
-
-const app = new Clarifai.App({
-  apiKey: '1b12ae636bb5460fadf4ba443da100f8'
- });
 
 const initialState = {
   input: '',
@@ -57,7 +52,9 @@ class App extends Component {
 
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    console.log(clarifaiFace)
     const image = document.getElementById('inputImage');
+    console.log(image)
     const width = Number(image.width);
     const height = Number(image.height);
     return {
@@ -76,12 +73,16 @@ class App extends Component {
     this.setState({ input: e.target.value })
   }
 
-  // You can just use this as the first param instead of the model in case the api is down:
-  // "53e1df302c079b3db8a0a36033ed2d15"
-
   onImageUpload = () => {
-    this.setState({ imageURL: this.state.input })
-    app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+    this.setState({ imageURL: this.state.input });
+      fetch('http://localhost:3000/imageurl', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          input: this.state.input
+        })
+      })
+      .then(response => response.json())
       .then((response) => {
         if (response) {
           fetch('http://localhost:3000/image', {
@@ -90,10 +91,10 @@ class App extends Component {
             body: JSON.stringify({
               id: this.state.user.id,
             })
-            .then(response => response.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count }))
-            })
+          })
+          .then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count }))
           })
           .catch(console.log)
         }
@@ -114,8 +115,8 @@ class App extends Component {
       <div>
         <Logo />
         <UploadCount
-          name={user.name}
-          entries={user.entries}
+          name={user?.name}
+          entries={user?.entries}
         />
         <ImageLinkForm
           onInputChange={this.onInputChange}

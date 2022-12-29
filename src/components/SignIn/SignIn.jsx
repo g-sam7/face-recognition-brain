@@ -7,16 +7,7 @@ const SignIn = ({
 }) => {
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
-  const onEmailChange = (event) => {
-    setSignInEmail({
-      email: event.target.value,
-    })
-  }
-  const onPasswordChange = (event) => {
-    setSignInPassword({
-      password: event.target.value,
-    })
-  }
+  
   const onSubmitSignIn = () => {
     fetch('http://localhost:3000/signin', {
       method: 'POST',
@@ -25,15 +16,17 @@ const SignIn = ({
         email: signInEmail,
         password: signInPassword
       })
-      .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          loadUser(user);
-          onRouteChange('home');
-        }
-      })
     })
+    .then(response => response.json())
+    .then(user => {
+      if (user.id) {
+        loadUser(user);
+        onRouteChange('home');
+      }
+    })
+    .catch(err => console.log('Error: ', err))
   }
+  
   return (
     <div>
        {/* TODO: DRY this up into a shared form between Signin and Register */}
@@ -47,7 +40,7 @@ const SignIn = ({
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-slate-100 py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form className="space-y-6" action="#" method="POST">
+            <div className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-bold text-gray-700">
                   Email address
@@ -59,7 +52,7 @@ const SignIn = ({
                     type="email"
                     autoComplete="email"
                     required
-                    onChange={onEmailChange}
+                    onChange={(e) => setSignInEmail(e.target.value)}
                     className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-fuchsia-500 focus:outline-none focus:ring-fuchsia-500 sm:text-sm"
                   />
                 </div>
@@ -76,7 +69,7 @@ const SignIn = ({
                     type="password"
                     autoComplete="current-password"
                     required
-                    onChange={onPasswordChange}
+                    onChange={(e) => setSignInPassword(e.target.value)}
                     className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-fuchsia-500 focus:outline-none focus:ring-fuchsia-500 sm:text-sm"
                   />
                 </div>
@@ -103,7 +96,7 @@ const SignIn = ({
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

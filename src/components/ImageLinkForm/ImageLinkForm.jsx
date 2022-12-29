@@ -5,9 +5,7 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
         <div className="flex flex-col items-center">
           <div className="space-y-2">
             <p className="flex flex-col items-center text-gray-700 py-4 font-bold">
-              <span>This magic brain is hungry.</span>
-              <span>Feed brain a URL to your image and they will detect faces found within...</span>
-              <span>Don't believe me?</span>
+              <span>Paste an image URL into this magic brain and it will detect the faces within...</span>
             </p>
             <div className="flex flex-col items-center space-y-4">
               <input
